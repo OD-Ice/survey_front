@@ -8,7 +8,10 @@
             :confirm-loading="confirmLoading"
             @ok="handleOk"
         >
-            <a-input v-model:value="survey_name" :placeholder="modalText"/>
+            <a-input v-model:value="data.title" :placeholder="modalText" allow-clear/>
+            <br/>
+            <br/>
+            <a-textarea v-model:value="data.description" placeholder="问卷简介" allow-clear />
         </a-modal>
         <a-menu
             id="left_menu"
@@ -31,7 +34,9 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {defineComponent, reactive, ref} from "vue";
+import {message} from "ant-design-vue";
+import {Service} from "@/service/service";
 
 const loading = ref(false)
 function enterLoading() {
@@ -51,21 +56,33 @@ function handleClick({key}) {
 }
 
 // 弹窗
-const modalText = ref('请输入问卷标题');
+const modalText = ref('问卷标题');
 const visible = ref(false);
 const confirmLoading = ref(false);
-function handleOk(){
-    modalText.value = '问卷创建中...';
+
+
+// 创建问卷接口
+const data = reactive({
+    title: "",
+    description: "",
+})
+
+async function handleOk(){
+    if (data.title.trim() === "") {
+        message.error("问卷标题不能为空！")
+        return
+    }
     confirmLoading.value = true;
-    setTimeout(() => {
-        visible.value = false;
-        confirmLoading.value = false;
-        loading.value = false;
-    }, 2000);
+    await Service.post("/api/questionnaire/create", data,
+    ).then(res => {
+        console.log(res)
+    })
+    visible.value = false;
+    confirmLoading.value = false;
+    loading.value = false;
+    location.reload();
 }
 
-// 问卷标题
-const survey_name = ref("");
 </script>
 
 <style lang="scss">

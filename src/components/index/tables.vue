@@ -75,7 +75,7 @@ const columns = [
     }
 ];
 const queryData = params => {
-    return `http://127.0.0.1:8080/questionnaire/get_list?${new URLSearchParams(params)}`;
+    return `/api/questionnaire/get_list?${new URLSearchParams(params)}`;
 };
 export default defineComponent({
     setup() {

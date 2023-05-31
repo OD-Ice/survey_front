@@ -17,7 +17,7 @@ export default ({mode}) => {
         },
         server: {
             proxy: {
-                "/questionnaire/create" : {
+                "/api" : {
                     target: baseUrl
                 }
             }
