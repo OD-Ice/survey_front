@@ -19,6 +19,11 @@
 <script>
 import {usePagination} from 'vue-request';
 import {computed, defineComponent} from 'vue';
+import {userStore} from "@/stores/store";
+import router from '@/router';
+import {message} from "ant-design-vue";
+
+const store = userStore()
 
 const columns = [
     {
@@ -74,9 +79,22 @@ const columns = [
         },
     }
 ];
-const queryData = params => {
-    return `/api/questionnaire/get_list?${new URLSearchParams(params)}`;
-};
+async function queryData(params) {
+    const response = await fetch(`/api/questionnaire/get_list?${new URLSearchParams(params)}`, {
+        headers: {"token": store.userInfo.token},
+    });
+    if (response.status === 401) {
+        // 弹窗提示
+        message.warn("您已退出登录");
+        // 跳转到登录页面
+        setTimeout(() => {
+            router.push({name: "login"})
+        }, 1)
+        return
+    }
+    return response.json();
+}
+
 export default defineComponent({
     setup() {
         const {
@@ -86,6 +104,9 @@ export default defineComponent({
             current,
             pageSize,
         } = usePagination(queryData, {
+            headers: {
+                'token': store.userInfo.token
+            },
             formatResult: res => {
                 return res.data.map(item => {
                     if (item.status === 0) {

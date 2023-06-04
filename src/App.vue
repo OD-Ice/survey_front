@@ -3,6 +3,10 @@
 </template>
 
 <script setup>
+import {userStore} from "@/stores/store";
+
+const store = userStore()
+store.loadUserInfo()
 
 </script>
 
