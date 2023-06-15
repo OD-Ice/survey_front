@@ -1,5 +1,5 @@
 <template>
-    <a-radio :style="radioStyle" :value="option.option_id">{{ option.option_text }}</a-radio>
+    <a-radio :style="radioStyle" :value="option.id">{{ option.option_text }}</a-radio>
 </template>
 
 <script setup>

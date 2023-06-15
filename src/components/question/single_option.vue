@@ -5,12 +5,14 @@
                 <h2>{{ props.question_num }}.</h2>
             </div>
             <div class="option_text">
-                <h2>{{ props.question.question_text }}</h2>
+                <h2>{{ props.question.question_text }}(单选)</h2>
             </div>
+            <a-button class="edit-button" type="primary" @click="editQuestion(route, props.question.id, props.question.question_type, props.question.question_text, props.question.option_list)">编辑</a-button>
         </div>
         <a-radio-group v-model:value="value">
-            <SURVEYSingleItem v-for="option in option_list" :option="option"></SURVEYSingleItem>
+            <SURVEYSingleItem v-for="option in props.question.option_list" :option="option"></SURVEYSingleItem>
         </a-radio-group>
+
     </div>
     <SURVEYOption></SURVEYOption>
 </template>
@@ -19,6 +21,10 @@
 import {reactive, ref} from "vue";
 import SURVEYOption from "@/components/question/base_option.vue"
 import SURVEYSingleItem from "@/components/question/single_option_item.vue"
+import {editQuestion} from "@/components/edit/main_edit.js"
+import {useRoute} from "vue-router";
+
+const route = useRoute()
 
 const value = ref("");
 const radioStyle = reactive({
@@ -30,7 +36,6 @@ const radioStyle = reactive({
 const props = defineProps({
     question: Object,
     question_num: String,
-    option_list: Array,
 })
 </script>
 

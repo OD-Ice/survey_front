@@ -11,7 +11,7 @@
         <template #name="{ text }">{{ text.first }} {{ text.last }}</template>
         <template #action="{ record }">
 
-              <a>编辑</a>
+              <a :href="`/edit/${record.id}`">编辑</a>
 
         </template>
     </a-table>

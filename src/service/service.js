@@ -20,6 +20,9 @@ Service.interceptors.request.use(request => {
 })
 
 Service.interceptors.response.use(response => {
+        if (response.data.code !== 0) {
+            message.error(response.data.msg)
+        }
         return response.data
     },
     error => {
@@ -30,7 +33,8 @@ Service.interceptors.response.use(response => {
             setTimeout(() => {
                 router.push({name: "login"})
             }, 1)
-            // window.location.href = '/login'
+        } else {
+            message.error(error.response.data.msg)
         }
         return Promise.reject(error)
     })

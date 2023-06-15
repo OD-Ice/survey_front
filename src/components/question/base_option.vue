@@ -15,8 +15,12 @@
     .option_title {
         margin-bottom: 10px;
         display: flex;
+        justify-content: space-between;
         .option_num {
             margin-right: 8px;
+        }
+        .edit-button {
+            margin-left: auto;
         }
     }
 }

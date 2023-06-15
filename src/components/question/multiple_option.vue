@@ -2,29 +2,20 @@
     <div class="option">
         <div class="option_title">
             <div class="option_num">
-                <h2>2.</h2>
+                <h2>{{ props.question_num }}.</h2>
             </div>
             <div class="option_text">
-                <h2>第二题</h2>
+                <h2>{{ props.question.question_text }}(多选)</h2>
             </div>
+            <a-button class="edit-button" type="primary" @click="editQuestion(route, props.question.id, props.question.question_type, props.question.question_text, props.question.option_list)">编辑</a-button>
         </div>
         <a-checkbox-group v-model:value="value" style="width: 100%">
             <a-row>
-                <a-col :span="8">
-                    <a-checkbox value="A">A</a-checkbox>
-                </a-col>
-                <a-col :span="8">
-                    <a-checkbox value="B">B</a-checkbox>
-                </a-col>
-                <a-col :span="8">
-                    <a-checkbox value="C">C</a-checkbox>
-                </a-col>
-                <a-col :span="8">
-                    <a-checkbox value="D">D</a-checkbox>
-                </a-col>
-                <a-col :span="8">
-                    <a-checkbox value="E">E</a-checkbox>
-                </a-col>
+                <template v-for="option in props.question.option_list" :key="option.id">
+                    <a-col :span="8">
+                        <a-checkbox :value="option.id">{{ option.option_number }}. {{ option.option_text }}</a-checkbox>
+                    </a-col>
+                </template>
             </a-row>
         </a-checkbox-group>
     </div>
@@ -34,8 +25,17 @@
 <script setup>
 import {ref} from "vue";
 import SURVEYOption from "@/components/question/base_option.vue"
+import {editQuestion} from "@/components/edit/main_edit";
+import {useRoute} from "vue-router";
 
+const route = useRoute()
 const value = ref([]);
+
+const props = defineProps({
+    question: Object,
+    question_num: String,
+})
+
 </script>
 
 <style lang="scss">
