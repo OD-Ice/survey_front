@@ -18,6 +18,12 @@ const router = createRouter({
             name: "index",
             component: () => import("../views/web/index.vue"),
             children: []
+        },
+        {
+            path: "/edit/:id",
+            name: "edit",
+            component: () => import("../views/web/edit.vue"),
+            children: []
         }
     ]
 })

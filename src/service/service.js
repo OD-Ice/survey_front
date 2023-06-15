@@ -1,5 +1,7 @@
 import axios from "axios";
 import {userStore} from "@/stores/store";
+import {message} from "ant-design-vue";
+import router from "@/router";
 
 export const Service = axios.create({
     timeout: 7000,
@@ -18,5 +20,17 @@ Service.interceptors.request.use(request => {
 })
 
 Service.interceptors.response.use(response => {
-    return response.data
-})
+        return response.data
+    },
+    error => {
+        // 请求出错，检查状态码
+        if (error.response && error.response.status === 401) {
+            // 跳转到登录页
+            message.warn("当前登录已失效")
+            setTimeout(() => {
+                router.push({name: "login"})
+            }, 1)
+            // window.location.href = '/login'
+        }
+        return Promise.reject(error)
+    })
