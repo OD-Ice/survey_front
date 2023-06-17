@@ -23,6 +23,9 @@
             <template v-else-if="record.status === '已删除'" class="publish">
                 <a class="publish-button" href="#" @click="editStatus(record, 0)">恢复</a>
             </template>
+            <template v-if="record.status === '已发布'" class="publish">
+                <a class="publish-button" href="#" @click="copyText(record.id)">复制链接</a>
+            </template>
         </template>
     </a-table>
 </template>
@@ -176,6 +179,23 @@ export default defineComponent({
                     }
                 })
         }
+        const copyText = (questionnaireId) => {
+
+            // 获取当前域名
+            const currentDomain = window.location.origin;
+            const textarea = `${currentDomain}/answer/${questionnaireId}`;
+
+            // 复制文本
+            navigator.clipboard.writeText(textarea)
+                .then(() => {
+                    message.info('文本已成功复制到剪贴板');
+                })
+                .catch((error) => {
+                    message.error('复制文本到剪贴板时出错:', error);
+                });
+            // 在控制台打印复制的文本
+            console.log('已复制文本:', textarea);
+        }
         return {
             dataSource,
             pagination,
@@ -183,6 +203,7 @@ export default defineComponent({
             columns,
             editStatus,
             handleTableChange,
+            copyText,
         };
     },
 });
