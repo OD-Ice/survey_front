@@ -10,7 +10,9 @@ import SURVEYUserInfo from "@/components/user_info.vue";
         </div>
         <div class="right">
             <div class="icon_action">
-                <i class="iconfont iconzhuye"></i>
+                <router-link to="/index">
+                    <i class="iconfont iconzhuye"></i>
+                </router-link>
             </div>
             <SURVEYUserInfo></SURVEYUserInfo>
         </div>
@@ -33,6 +35,7 @@ header {
         .icon_action {
             margin-right: 20px;
             i {
+                color: black;
                 margin-left: 10px;
                 cursor: pointer;
                 font-size: 25px;

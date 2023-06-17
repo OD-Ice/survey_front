@@ -10,18 +10,29 @@
     >
         <template #name="{ text }">{{ text.first }} {{ text.last }}</template>
         <template #action="{ record }">
-
-              <a :href="`/edit/${record.id}`">编辑</a>
-
+            <a :href="`/edit/${record.id}`">编辑</a>
+            <template v-if="record.status !== '已删除'" class="publish">
+                <a class="delete-button" href="#" @click="editStatus(record, -1)">删除</a>
+            </template>
+            <template v-if="record.status === '未发布'" class="publish">
+                <a class="publish-button" href="#" @click="editStatus(record, 1)">发布</a>
+            </template>
+            <template v-else-if="record.status === '已发布'" class="publish">
+                <a class="publish-button" href="#" @click="editStatus(record, 0)">下架</a>
+            </template>
+            <template v-else-if="record.status === '已删除'" class="publish">
+                <a class="publish-button" href="#" @click="editStatus(record, 0)">恢复</a>
+            </template>
         </template>
     </a-table>
 </template>
 <script>
 import {usePagination} from 'vue-request';
-import {computed, defineComponent} from 'vue';
+import {computed, defineComponent, reactive} from 'vue';
 import {userStore} from "@/stores/store";
 import router from '@/router';
 import {message} from "ant-design-vue";
+import {Service} from "@/service/service";
 
 const store = userStore()
 
@@ -50,11 +61,15 @@ const columns = [
         sorter: true,
         filters: [
             {
-                text: '正常',
+                text: '未发布',
                 value: 0,
             },
             {
                 text: '已删除',
+                value: -1,
+            },
+            {
+                text: '已发布',
                 value: 1,
             }
         ],
@@ -72,7 +87,7 @@ const columns = [
     {
         title: '操作',
         dataIndex: 'action',
-        width: 100,
+        width: 150,
         fixed: "right",
         slots: {
             customRender: 'action',
@@ -110,9 +125,11 @@ export default defineComponent({
             formatResult: res => {
                 return res.data.map(item => {
                     if (item.status === 0) {
-                        item.status = "正常";
-                    } else if (item.status === 1) {
+                        item.status = "未发布";
+                    } else if (item.status === -1) {
                         item.status = "已删除";
+                    } else if (item.status === 1) {
+                        item.status = "已发布";
                     } else {
                         item.status = "未知"
                     }
@@ -138,13 +155,44 @@ export default defineComponent({
                 ...filters,
             });
         };
+
+        const editStatus = (record, statusNum) => {
+            const data = reactive({
+                "id": record.id,
+                "status": statusNum
+            })
+            Service.post("/api/questionnaire/edit_status", data)
+                .then(res => {
+                    console.log(res.data)
+                    if (res.code === 0) {
+                        if (statusNum === -1) {
+                            record.status = "已删除"
+                        } else if (statusNum === 0) {
+                            record.status = "未发布"
+                        } else if (statusNum === 1) {
+                            record.status = "已发布"
+                        }
+                        message.info("成功")
+                    }
+                })
+        }
         return {
             dataSource,
             pagination,
             loading,
             columns,
+            editStatus,
             handleTableChange,
         };
     },
 });
 </script>
+<style>
+.delete-button{
+    margin-left: 10px;
+    color: red;
+}
+.publish-button {
+    margin-left: 10px;
+}
+</style>

@@ -28,6 +28,18 @@ const router = createRouter({
             name: "edit",
             component: () => import("../views/web/edit.vue"),
             children: []
+        },
+        {
+            path: "/answer/:id",
+            name: "answer",
+            component: () => import("../views/web/answer.vue"),
+            children: []
+        },
+        {
+            path: "/submit_success",
+            name: "submit_success",
+            component: () => import("../views/web/submit.vue"),
+            children: []
         }
     ]
 })

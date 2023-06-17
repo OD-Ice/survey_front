@@ -8,13 +8,13 @@
                 <div class="question_item">
                     <!-- 根据 question_type 插入不同的组件 -->
                     <template v-if="question.question_type === 1">
-                        <SURVEYSingle :question="question" :question_num="question.question_num"></SURVEYSingle>
+                        <SURVEYSingle :question="question" :question_num="question.question_num" edit="1" :answer_list="[]"></SURVEYSingle>
                     </template>
                     <template v-else-if="question.question_type === 2">
-                        <SURVEYMultiple :question="question" :question_num="question.question_num"></SURVEYMultiple>
+                        <SURVEYMultiple :question="question" :question_num="question.question_num" edit="1" :answer_list="[]"></SURVEYMultiple>
                     </template>
                     <template v-else-if="question.question_type === 3">
-                        <SURVEYText :question="question" :question_num="question.question_num"></SURVEYText>
+                        <SURVEYText :question="question" :question_num="question.question_num" edit="1" :answer_list="[]"></SURVEYText>
                     </template>
                 </div>
             </template>
@@ -72,6 +72,7 @@
                 title="编辑问题"
                 v-model:visible="editVisible"
                 @ok="editHandleOk"
+                @cancel="getQuestionList"
             >
                 <a-input v-model:value="editQuestionData.question_text" placeholder="问题描述" allow-clear/>
                 <br/>
@@ -138,6 +139,7 @@ function getQuestionList() {
             const { code, data } = response;
             if (code === 0) {
                 questionList.splice(0, questionList.length, ...data.question_list);
+                console.log(questionList)
             } else {
                 // 处理错误情况
             }
@@ -232,5 +234,10 @@ function editRemoveOption(index) {
         justify-content: center;
         align-items: center;
     }
+}
+.option_title {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 </style>

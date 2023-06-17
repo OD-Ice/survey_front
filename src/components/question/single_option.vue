@@ -7,10 +7,14 @@
             <div class="option_text">
                 <h2>{{ props.question.question_text }}(单选)</h2>
             </div>
-            <a-button class="edit-button" type="primary" @click="editQuestion(route, props.question.id, props.question.question_type, props.question.question_text, props.question.option_list)">编辑</a-button>
+            <template v-if="props.edit === '1'">
+                <a-button class="edit-button" type="primary" @click="editQuestion(route, props.question.id, props.question.question_type, props.question.question_text, props.question.option_list)">编辑</a-button>
+            </template>
         </div>
         <a-radio-group v-model:value="value">
-            <SURVEYSingleItem v-for="option in props.question.option_list" :option="option"></SURVEYSingleItem>
+            <template v-for="option in props.question.option_list">
+                <a-radio :style="radioStyle" :value="option.id">{{ option.option_text }}</a-radio>
+            </template>
         </a-radio-group>
 
     </div>
@@ -20,13 +24,12 @@
 <script setup>
 import {reactive, ref} from "vue";
 import SURVEYOption from "@/components/question/base_option.vue"
-import SURVEYSingleItem from "@/components/question/single_option_item.vue"
 import {editQuestion} from "@/components/edit/main_edit.js"
 import {useRoute} from "vue-router";
 
 const route = useRoute()
 
-const value = ref("");
+const value = ref(null);
 const radioStyle = reactive({
     display: 'flex',
     height: '30px',
@@ -36,7 +39,15 @@ const radioStyle = reactive({
 const props = defineProps({
     question: Object,
     question_num: String,
+    edit: String,
+    answer_list: Array
 })
+
+props.answer_list.push({
+    question_id: props.question.id,
+    option_id: value,
+})
+
 </script>
 
 <style lang="scss">

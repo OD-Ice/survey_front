@@ -7,11 +7,13 @@
             <div class="option_text">
                 <h2>{{ props.question.question_text }}(简答/填空)</h2>
             </div>
-            <a-button class="edit-button" type="primary" @click="editQuestion(route, props.question.id, props.question.question_type, props.question.question_text, props.question.option_list)">编辑</a-button>
+            <template v-if="props.edit === '1'">
+                <a-button class="edit-button" type="primary" @click="editQuestion(route, props.question.id, props.question.question_type, props.question.question_text, props.question.option_list)">编辑</a-button>
+            </template>
         </div>
         <a-textarea
             v-model:value="value"
-            placeholder="Autosize height based on content lines"
+            placeholder="请作答"
             auto-size
         />
     </div>
@@ -31,7 +33,15 @@ const props = defineProps({
     question: Object,
     question_num: String,
     option_list: Array,
+    edit: String,
+    answer_list: Array
 })
+
+props.answer_list.push({
+    question_id: props.question.id,
+    text_answer: value,
+})
+
 
 </script>
 
