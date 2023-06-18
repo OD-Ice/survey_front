@@ -34,6 +34,7 @@ import {Service} from "@/service/service";
 import {useRoute} from "vue-router";
 import {message} from "ant-design-vue";
 import router from "@/router";
+import {getQuestionList} from "@/utils/get_data";
 const route = useRoute()
 
 const data = reactive({
@@ -41,22 +42,7 @@ const data = reactive({
 })
 const questionList = reactive([]);
 
-function getQuestionList() {
-    Service.get('/api/question/get_list', {params: data})
-        .then(response => {
-            const { code, data } = response;
-            if (code === 0) {
-                questionList.splice(0, questionList.length, ...data.question_list);
-            } else {
-                // 处理错误情况
-            }
-        })
-        .catch(error => {
-            // 处理异常情况
-        });
-}
-
-getQuestionList()
+getQuestionList(data, questionList)
 
 const answerList = []
 let hasSubmit = false

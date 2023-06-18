@@ -125,6 +125,7 @@ import {Service} from "@/service/service";
 import {useRoute} from "vue-router";
 import {message} from "ant-design-vue";
 import {editVisible, editQuestionData} from "@/components/edit/main_edit.js"
+import {getQuestionList} from "@/utils/get_data";
 const route = useRoute()
 
 const visible = ref(false);
@@ -133,23 +134,7 @@ const data = reactive({
 })
 const questionList = reactive([]);
 
-function getQuestionList() {
-    Service.get('/api/question/get_list', {params: data})
-        .then(response => {
-            const { code, data } = response;
-            if (code === 0) {
-                questionList.splice(0, questionList.length, ...data.question_list);
-                console.log(questionList)
-            } else {
-                // 处理错误情况
-            }
-        })
-        .catch(error => {
-            // 处理异常情况
-        });
-}
-
-getQuestionList()
+getQuestionList(data, questionList)
 
 function addQuestion() {
     visible.value = true;
@@ -168,7 +153,7 @@ function handleOk() {
             console.log(res.data)
             if (res.code === 0) {
                 message.info("创建成功")
-                getQuestionList()
+                getQuestionList(data, questionList)
             }
             visible.value = false;
         }
@@ -181,7 +166,7 @@ function editHandleOk() {
                 console.log(res.data)
                 if (res.code === 0) {
                     message.info("修改成功")
-                    getQuestionList()
+                    getQuestionList(data, questionList)
                 }
                 editVisible.value = false;
             }

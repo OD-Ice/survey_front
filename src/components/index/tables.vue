@@ -26,6 +26,7 @@
             <template v-if="record.status === '已发布'" class="publish">
                 <a class="publish-button" href="#" @click="copyText(record.id)">复制链接</a>
             </template>
+            <a class="publish-button" :href="'/analyze/' + record.id" @click="copyText(record.id)">统计</a>
         </template>
     </a-table>
 </template>

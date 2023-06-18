@@ -40,6 +40,12 @@ const router = createRouter({
             name: "submit_success",
             component: () => import("../views/web/submit.vue"),
             children: []
+        },
+        {
+            path: "/analyze/:id",
+            name: "analyze",
+            component: () => import("../views/web/analyze.vue"),
+            children: []
         }
     ]
 })
