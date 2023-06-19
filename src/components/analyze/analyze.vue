@@ -12,9 +12,7 @@
                         <SURVEYOption :analyzeData="analyzeData" :question="question"></SURVEYOption>
                     </template>
                     <template v-else>
-                        <div class="detail">
-                            <a-button class="detail_button" type="primary" @click="getSubjectiveAnalyze(question)">详情</a-button>
-                        </div>
+                        <SURVEYSubject :question="question"></SURVEYSubject>
                     </template>
                 </div>
             </template>
@@ -24,13 +22,10 @@
 
 <script setup>
 import SURVEYOption from "@/components/analyze/option_analyze.vue";
-import SURVEYMultiple from "@/components/question/multiple_option.vue";
-import SURVEYText from "@/components/question/text_option.vue";
+import SURVEYSubject from "@/components/analyze/subject_detail.vue"
 import {reactive, ref, toRefs} from "vue";
 import {Service} from "@/service/service";
 import {useRoute} from "vue-router";
-import {message} from "ant-design-vue";
-import router from "@/router";
 import {getQuestionList} from "@/utils/get_data";
 const route = useRoute()
 
@@ -41,11 +36,6 @@ const questionList = reactive([]);
 
 const analyzeData = ref({});
 const questionnaireData = ref({})
-
-function getSubjectiveAnalyze(question) {
-    const getData = {id: question.id, page: 1, results: 10}
-    Service.get("/api/questionnaire/get_subjective_analyze", {params: getData})
-}
 
 function getQuestionnaire() {
     const getData = {id: route.params.id}
@@ -113,15 +103,7 @@ fetchData()
         width: 50%;
     }
 }
-.detail {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0;
-    .detail_button {
-        width: 70%;
-    }
-}
+
 .question_item {
     border: 1px solid #f0eeee;
 }

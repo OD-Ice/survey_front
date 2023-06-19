@@ -6,25 +6,25 @@
                     用户注册
                 </div>
                 <div class="register_form">
-                    <div class="register_item">
-                        <a-input v-model:value="data.user_name" placeholder="用户名">
-                            <template #prefix>
-                                <i class="iconfont iconperson"></i>
-                            </template>
-                        </a-input>
-                    </div>
-                    <div class="register_item">
-                        <a-select
-                            ref="select"
-                            v-model:value="data.sex"
-                            style="width: 100%"
-                            @focus="focus"
-                        >
-                            <a-select-option value=0>性别未知</a-select-option>
-                            <a-select-option value=1>男</a-select-option>
-                            <a-select-option value=2>女</a-select-option>
-                        </a-select>
-                    </div>
+<!--                    <div class="register_item">-->
+<!--                        <a-input v-model:value="data.user_name" placeholder="用户名">-->
+<!--                            <template #prefix>-->
+<!--                                <i class="iconfont iconperson"></i>-->
+<!--                            </template>-->
+<!--                        </a-input>-->
+<!--                    </div>-->
+<!--                    <div class="register_item">-->
+<!--                        <a-select-->
+<!--                            ref="select"-->
+<!--                            v-model:value="data.sex"-->
+<!--                            style="width: 100%"-->
+<!--                            @focus="focus"-->
+<!--                        >-->
+<!--                            <a-select-option value=0>性别未知</a-select-option>-->
+<!--                            <a-select-option value=1>男</a-select-option>-->
+<!--                            <a-select-option value=2>女</a-select-option>-->
+<!--                        </a-select>-->
+<!--                    </div>-->
                     <div class="register_item">
                         <a-input v-model:value="data.phone" placeholder="手机号">
                             <template #prefix>
@@ -32,13 +32,13 @@
                             </template>
                         </a-input>
                     </div>
-                    <div class="register_item">
-                        <a-input v-model:value="data.email" placeholder="邮箱">
-                            <template #prefix>
-                                <i class="iconfont iconperson"></i>
-                            </template>
-                        </a-input>
-                    </div>
+<!--                    <div class="register_item">-->
+<!--                        <a-input v-model:value="data.email" placeholder="邮箱">-->
+<!--                            <template #prefix>-->
+<!--                                <i class="iconfont iconperson"></i>-->
+<!--                            </template>-->
+<!--                        </a-input>-->
+<!--                    </div>-->
                     <div class="register_item">
                         <a-input v-model:value="data.nick_name" placeholder="昵称">
                             <template #prefix>
@@ -64,6 +64,11 @@
                         <a-button type="primary" @click="Register">
                             注册
                         </a-button>
+                        <br>
+                        <br>
+                        <a href="/login">
+                            直接登录
+                        </a>
                     </div>
                 </div>
             </div>
@@ -89,9 +94,10 @@ const data = reactive({
 })
 
 async function Register() {
-    if (data.user_name.trim() === "") {
+    if (data.phone.trim() === "") {
         message.error("用户名不能为空！")
     }
+    data.user_name = data.phone
     if (data.password.trim() === "") {
         message.error("密码不能为空！")
     }
@@ -101,7 +107,6 @@ async function Register() {
     await Service.post("/api/register", data,
     ).then(res => {
         if (res.code) {
-            message.error(res.msg)
             return
         }
         message.info("注册成功")
