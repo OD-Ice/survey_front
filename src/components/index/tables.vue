@@ -24,9 +24,9 @@
                 <a class="publish-button" href="#" @click="editStatus(record, 0)">恢复</a>
             </template>
             <template v-if="record.status === '已发布'" class="publish">
-                <a class="publish-button" href="#" @click="copyText(record.id)">复制链接</a>
+                <a class="publish-button" :id="'cp' + record.id" href="#" @click="copyValue(record)" :data-clipboard-text="copyText(record.id)">复制链接</a>
             </template>
-            <a class="publish-button" :href="'/analyze/' + record.id" @click="copyText(record.id)">统计</a>
+            <a class="publish-button" :href="'/analyze/' + record.id">统计</a>
         </template>
     </a-table>
 </template>
@@ -37,6 +37,7 @@ import {userStore} from "@/stores/store";
 import router from '@/router';
 import {message} from "ant-design-vue";
 import {Service} from "@/service/service";
+import Clipboard from 'clipboard';
 
 const store = userStore()
 
@@ -181,22 +182,24 @@ export default defineComponent({
                 })
         }
         const copyText = (questionnaireId) => {
-
             // 获取当前域名
             const currentDomain = window.location.origin;
-            const textarea = `${currentDomain}/answer/${questionnaireId}`;
-
-            // 复制文本
-            navigator.clipboard.writeText(textarea)
-                .then(() => {
-                    message.info('文本已成功复制到剪贴板');
-                })
-                .catch((error) => {
-                    message.error('复制文本到剪贴板时出错:', error);
-                });
-            // 在控制台打印复制的文本
-            console.log('已复制文本:', textarea);
+            return `${currentDomain}/answer/${questionnaireId}`
         }
+
+        const copyValue = (record) => {
+            const tempId = '#cp' + record.id
+            let clipBoard = new Clipboard(tempId)
+            clipBoard.on('success', function() {
+                clipBoard.destroy() // 销毁上一次的复制内容
+                clipBoard = new Clipboard(tempId)
+                message.success('复制成功')
+            })
+            clipBoard.on('error', function() {
+                message.info('复制失败，请手动复制')
+            })
+        }
+
         return {
             dataSource,
             pagination,
@@ -205,6 +208,7 @@ export default defineComponent({
             editStatus,
             handleTableChange,
             copyText,
+            copyValue,
         };
     },
 });
