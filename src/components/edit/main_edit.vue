@@ -1,7 +1,7 @@
 <template>
     <div class="main_edit">
         <div class="survey_title">
-            <h1><b>问卷标题</b></h1>
+            <h1><b>{{ questionnaireData.title }}</b></h1>
         </div>
         <div class="question_list">
             <template v-for="question in questionList" :key="question.id">
@@ -194,6 +194,23 @@ function removeOption(index) {
 function editRemoveOption(index) {
     editQuestionData.option_list.splice(index, 1);
 }
+
+const questionnaireData = ref({})
+
+function getQuestionnaire() {
+    const getData = {id: route.params.id}
+    Service.get("/api/questionnaire/get", {params: getData})
+        .then(response => {
+            const { code, data } = response;
+            if (code === 0) {
+                questionnaireData.value = data;
+            } else {
+                // 处理错误情况
+            }
+        })
+}
+
+getQuestionnaire()
 
 </script>
 

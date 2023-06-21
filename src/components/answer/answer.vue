@@ -1,7 +1,7 @@
 <template>
     <div class="main_edit">
         <div class="survey_title">
-            <h1><b>问卷标题</b></h1>
+            <h1><b>{{ questionnaireData.title }}</b></h1>
         </div>
         <div class="question_list">
             <template v-for="question in questionList" :key="question.id">
@@ -29,7 +29,7 @@
 import SURVEYSingle from "@/components/question/single_option.vue";
 import SURVEYMultiple from "@/components/question/multiple_option.vue";
 import SURVEYText from "@/components/question/text_option.vue";
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import {Service} from "@/service/service";
 import {useRoute} from "vue-router";
 import {message} from "ant-design-vue";
@@ -67,6 +67,23 @@ function submitAnswer() {
 
     hasSubmit = true
 }
+
+const questionnaireData = ref({})
+
+function getQuestionnaire() {
+    const getData = {id: route.params.id}
+    Service.get("/api/questionnaire/get", {params: getData})
+        .then(response => {
+            const { code, data } = response;
+            if (code === 0) {
+                questionnaireData.value = data;
+            } else {
+                // 处理错误情况
+            }
+        })
+}
+
+getQuestionnaire()
 
 </script>
 

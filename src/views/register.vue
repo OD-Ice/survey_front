@@ -119,7 +119,7 @@ async function Register() {
 
 <style>
 .register-page {
-    background-image: url('src/assets/img/login_bg.jpg');
+    background-image: url('@assets/img/login_bg.jpg');
     background-size: cover;
     background-position: center;
     height: 100vh;
