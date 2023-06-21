@@ -6,7 +6,7 @@ import SURVEYUserInfo from "@/components/user_info.vue";
 <template>
     <header>
         <div class="left">
-            <h2>问卷视界</h2>
+            <h2>狗狗问卷</h2>
         </div>
         <div class="right">
             <div class="icon_action">

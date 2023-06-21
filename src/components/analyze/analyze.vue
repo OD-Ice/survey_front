@@ -30,7 +30,7 @@
 <script setup>
 import SURVEYOption from "@/components/analyze/option_analyze.vue";
 import SURVEYSubject from "@/components/analyze/subject_detail.vue"
-import {reactive, ref, toRefs} from "vue";
+import {reactive, ref} from "vue";
 import {Service} from "@/service/service";
 import {useRoute} from "vue-router";
 import {getQuestionList} from "@/utils/get_data";
