@@ -3,6 +3,13 @@
         <div class="survey_title">
             <h1><b>{{ questionnaireData.title }}</b></h1>
         </div>
+        <div class="statistics">
+            <a-row>
+                <a-col :span="30">
+                    <a-statistic title="有效问卷数量" :value="answerCount" />
+                </a-col>
+            </a-row>
+        </div>
         <div class="question_list">
             <template v-for="question in questionList" :key="question.id">
                 <div class="question_item">
@@ -36,6 +43,7 @@ const questionList = reactive([]);
 
 const analyzeData = ref({});
 const questionnaireData = ref({})
+const answerCount = ref(0)
 
 function getQuestionnaire() {
     const getData = {id: route.params.id}
@@ -63,10 +71,24 @@ async function getAnalyzeData() {
         })
 }
 
+async function getAnswerCount() {
+    const getData = {id: route.params.id}
+    await Service.get("/api/questionnaire/answer_count", {params: getData})
+        .then(response => {
+            const { code, data } = response;
+            if (code === 0) {
+                answerCount.value = data.count;
+            } else {
+                // 处理错误情况
+            }
+        })
+}
+
 async function fetchData() {
     await getQuestionList(data, questionList);
     await getAnalyzeData()
     await getQuestionnaire()
+    await getAnswerCount()
 }
 fetchData()
 
@@ -89,6 +111,10 @@ fetchData()
         text-align: center;
         line-height: 100px;
     }
+}
+.statistics {
+    display: flex;
+    justify-content: center;
 }
 .option_title {
     margin-bottom: 10px;
